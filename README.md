@@ -12,7 +12,12 @@ So the obvious answer is to loop through the list, then in each iteration, loop 
 
 So that's what I do. Read all lines into a `HashSet`, then iterate the `HashSet` checking to see if `(2020 -  that number)` exists in the set. If I find one (and I assume I do), then return `(that number * (2020 - that number))`.
 
-Challenges: I still don't have an intuitive understanding of borrowing in Rust. Luckly, I have the very efficient and intelligent strategy of "try random things until the compiler stops complaining".
+Challenges: I still don't have an intuitive understanding of borrowing in Rust. Luckily, I have the very efficient and intelligent strategy of "try random things until the compiler stops complaining".
 
 Potential edge case: If the input contains only a single `1010`, that can be added to itself, and the "contains" lookup doesn't care if it's looking up the same number. So, the algorithm would incorrectly return `1010 * 1010`, when only one `1010` exists in the list.
 
+### Day 1 - Part 2
+
+Foiled! My brilliant scheme has been destroyed by the introduction of a third factor. So I went back to the original plan of just brute forcing the list--it's not that long. I must admit, I cringe when I see `for` loops nested three deep.
+
+My one solace is that I don't attempt to add numbers to themselves. So if 1000 and 20 were in the list, it wouldn't consider adding 1000 + 1000 + 20, since 1000 only appears once. At least I *think* I got that filtering correct.
