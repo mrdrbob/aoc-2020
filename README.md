@@ -45,3 +45,9 @@ var succeeds = rule(password);
 ### Day 3 - Part 1
 
 Not much to write about this one. I'm taking advantage of the fact that the `y` position always moves exactly 1, so I just iterate the lines to do that. Then just rotating the `x` position along the number line based on the length of the line.
+
+### Day 3 - Part 2
+
+I do appreciate these challenges where you build a simple algorithm and then must generalize it. I didn't do this the most efficient way possible, I ended up iterating the entire file for each rule being processed. If I'd build my `Rule` structure to keep the `x` and `y` state for itself, I probably could calculate all the values while iterating the file only once. But the file is not large and I'm aiming for simplicity.
+
+I also opted to include the first point (0, 0) in the total, though I don't think it's super clear if that was required. Should a tree at (0, 0) be counted? I thought so, so I put my logic for moving to the next positions *after* counting, which makes it read a little backwards.
