@@ -21,3 +21,8 @@ Potential edge case: If the input contains only a single `1010`, that can be add
 Foiled! My brilliant scheme has been destroyed by the introduction of a third factor. So I went back to the original plan of just brute forcing the list--it's not that long. I must admit, I cringe when I see `for` loops nested three deep.
 
 My one solace is that I don't attempt to add numbers to themselves. So if 1000 and 20 were in the list, it wouldn't consider adding 1000 + 1000 + 20, since 1000 only appears once. At least I *think* I got that filtering correct.
+
+### Day 2 - Part 1
+
+Part one is pretty straight forward. Read a list of password rules and see if the corresponding satisfies the rule. The hard part is still figuring out the idiosyncrasies of rust. Something like `line.as_ref().unwrap().as_str()` is probably the Rust equivalent of something like `((string)name.ToString()) as String;` in C#.
+
