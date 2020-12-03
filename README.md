@@ -41,3 +41,7 @@ var succeeds = rule(password);
 ```
 
 (I didn't test this.) I don't think there's really any benefit in this case, other than looking kind of cool, I guess.
+
+### Day 3 - Part 1
+
+Not much to write about this one. I'm taking advantage of the fact that the `y` position always moves exactly 1, so I just iterate the lines to do that. Then just rotating the `x` position along the number line based on the length of the line.
