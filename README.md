@@ -24,5 +24,20 @@ My one solace is that I don't attempt to add numbers to themselves. So if 1000 a
 
 ### Day 2 - Part 1
 
-Part one is pretty straight forward. Read a list of password rules and see if the corresponding satisfies the rule. The hard part is still figuring out the idiosyncrasies of rust. Something like `line.as_ref().unwrap().as_str()` is probably the Rust equivalent of something like `((string)name.ToString()) as String;` in C#.
+Part one is pretty straight forward. Read a list of password rules and see if the corresponding password satisfies the rule. The hard part (for me) was still figuring out the idiosyncrasies of Rust. Something like `line.as_ref().unwrap().as_str()` is probably the Rust equivalent of something like `((string)name.ToString()) as String;` in C#.
 
+### Day 2 - Part 2
+
+This one is just a small tweak to the password check function. I chose to sum each character that matched and then check that the total was `1`. I suppose I could have also done a `if`/`else` tree, or maybe something with a `XOR` and an `OR`.
+
+On a side-note, in a language where I'm comfortable with delegates/lambdas, I might have done something a bit more functional and created delegates for each rule. Then executed the delegates on the input. Something like:
+
+```
+Func<string, bool> CreatePasswordTest(int min, int max, char character)
+	=> (password) => password.Count(x => x == character) <= max && password.Count(x => x == character) >= min;
+
+var rule = CreatePasswordTest(min, max, c);
+var succeeds = rule(password);
+```
+
+(I didn't test this.) I don't think there's really any benefit in this case, other than looking kind of cool, I guess.

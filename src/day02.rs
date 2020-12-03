@@ -13,8 +13,8 @@ pub fn execute() {
 }
 
 struct PasswordRule {
-    min_times: usize,
-    max_times: usize,
+    position_1: usize,
+    position_2: usize,
     character: char
 }
 
@@ -28,14 +28,15 @@ fn test_line(line: &str) -> bool {
 
     let rule = PasswordRule {
         character: rule_split[1].chars().next().unwrap(),
-        min_times: numbers[0],
-        max_times: numbers[1]
+        position_1: numbers[0],
+        position_2: numbers[1]
     };
 
     satisfies_rule(line_split[1], &rule)
 }
 
 fn satisfies_rule(password: &str, rule: &PasswordRule) -> bool {
-    let count = password.chars().filter(|&c| { c == rule.character }).count();
-    count >= rule.min_times && count <= rule.max_times
+    let count = if password.chars().skip(rule.position_1).next().unwrap() == rule.character { 1 } else { 0 }
+              + if password.chars().skip(rule.position_2).next().unwrap() == rule.character { 1 } else { 0 };
+    count == 1
 }
