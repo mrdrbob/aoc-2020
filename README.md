@@ -51,3 +51,9 @@ Not much to write about this one. I'm taking advantage of the fact that the `y` 
 I do appreciate these challenges where you build a simple algorithm and then must generalize it. I didn't do this the most efficient way possible, I ended up iterating the entire file for each rule being processed. If I'd build my `Rule` structure to keep the `x` and `y` state for itself, I probably could calculate all the values while iterating the file only once. But the file is not large and I'm aiming for simplicity.
 
 I also opted to include the first point (0, 0) in the total, though I don't think it's super clear if that was required. Should a tree at (0, 0) be counted? I thought so, so I put my logic for moving to the next positions *after* counting, which makes it read a little backwards.
+
+### Day 4 - Part 1
+
+So for this one there's a bunch of records. Sometimes the records have newlines, but records are separated by an empty line. Again, I kind of took the easy route. I read the entire file into memory, then split on double new lines. Then I split on single new-lines and flatted the results to build a simple key-value pair representation of the record.
+
+Once that was done, it just checking that all the required keys existed for each record. I wanted my list of required keys to be data, so I attempted to make a `const` array of those keys. Not 100% certain I did that correctly.
