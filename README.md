@@ -57,3 +57,7 @@ I also opted to include the first point (0, 0) in the total, though I don't thin
 So for this one there's a bunch of records. Sometimes the records have newlines, but records are separated by an empty line. Again, I kind of took the easy route. I read the entire file into memory, then split on double new lines. Then I split on single new-lines and flatted the results to build a simple key-value pair representation of the record.
 
 Once that was done, it just checking that all the required keys existed for each record. I wanted my list of required keys to be data, so I attempted to make a `const` array of those keys. Not 100% certain I did that correctly.
+
+### Day 4 - Part 2
+
+I won't lie, this part of the challenge felt a lot like work. Probably because I do a fair amount of validation at my day job, so this wasn't much different. I did decide not to use regexes. The most challenging part was just getting all the little details right, and translating the C# `Where`/`Select`/etc in my head to similar constructs in Rust.
