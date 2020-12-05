@@ -61,3 +61,9 @@ Once that was done, it just checking that all the required keys existed for each
 ### Day 4 - Part 2
 
 I won't lie, this part of the challenge felt a lot like work. Probably because I do a fair amount of validation at my day job, so this wasn't much different. I did decide not to use regexes. The most challenging part was just getting all the little details right, and translating the C# `Where`/`Select`/etc in my head to similar constructs in Rust.
+
+### Day 5 - Part 1
+
+Reading the description for today's problem I couldn't help but think, "well that's just binary with extra steps." So I popped open my trusted programmers calculator, converted the characters into the ones and zeros, and sure enough, it was.
+
+Now, I probably could have done the conversion a bit more manually (instead of relying on `from_str_radix`), but it's Saturday and I'm a web developer; I can count on `0b0101` fingers how many times I've needed to do binary math in my daily life.
