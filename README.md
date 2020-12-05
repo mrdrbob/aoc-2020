@@ -67,3 +67,7 @@ I won't lie, this part of the challenge felt a lot like work. Probably because I
 Reading the description for today's problem I couldn't help but think, "well that's just binary with extra steps." So I popped open my trusted programmers calculator, converted the characters into the ones and zeros, and sure enough, it was.
 
 Now, I probably could have done the conversion a bit more manually (instead of relying on `from_str_radix`), but it's Saturday and I'm a web developer; I can count on `0b0101` fingers how many times I've needed to do binary math in my daily life.
+
+### Day 5 - Part 2
+
+This part was a relatively simple variation of part one. I just throw all the known seats into a `HashSet` (for quick lookup), and then iterate all possible seat numbers (the seats are made of a ten bit number, so one through `2 pow 10`), looking for a seat that does not exist, but where the previous and next ID do. As with many of these puzzles, I'm left feeling like there's probably a more clever way to do this... but `¯\_(ツ)_/¯`

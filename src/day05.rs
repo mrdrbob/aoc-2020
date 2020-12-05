@@ -1,4 +1,5 @@
 
+use std::collections::HashSet;
 use std::io::BufReader;
 use std::fs::File;
 use std::io::BufRead;
@@ -6,11 +7,15 @@ use std::io::BufRead;
 pub fn execute() {
     let file = File::open(".\\data\\05.txt").unwrap();
     let reader = BufReader::new(&file);
-    let result = reader.lines().into_iter().map(|line| {
+    let all_seats:HashSet<i32> = reader.lines().into_iter().map(|line| {
         calculate_seat_id(&line.unwrap())
-    }).max().unwrap();
+    }).collect();
 
-    println!("{}", result);
+    let found = (2..2i32.pow(10)).find(|index| {
+        all_seats.contains(&(index.clone() - 1)) && !all_seats.contains(index) && all_seats.contains(&(index.clone() + 1))
+    });
+
+    println!("{}", found.unwrap());
 }
 
 fn calculate_seat_id(line:&String) -> i32 {
