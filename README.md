@@ -71,3 +71,11 @@ Now, I probably could have done the conversion a bit more manually (instead of r
 ### Day 5 - Part 2
 
 This part was a relatively simple variation of part one. I just throw all the known seats into a `HashSet` (for quick lookup), and then iterate all possible seat numbers (the seats are made of a ten bit number, so one through `2 pow 10`), looking for a seat that does not exist, but where the previous and next ID do. As with many of these puzzles, I'm left feeling like there's probably a more clever way to do this... but `¯\_(ツ)_/¯`
+
+### Day 6 - Part 1
+
+Once again, I'm just using a `HashSet` to get unique items. Then I'm returning the length of that set.
+
+### Day 6 - Part 2
+
+So my solve for this was probably a bit on the "hacky" side, but it works. I'm sure a more clever Rust programer would do something with intersecting sets, or at least using map/reduce in place of the nested `for` loops I opted for. But it's Sunday, this works, it's good enough.
