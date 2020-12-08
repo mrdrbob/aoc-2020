@@ -79,3 +79,7 @@ Once again, I'm just using a `HashSet` to get unique items. Then I'm returning t
 ### Day 6 - Part 2
 
 So my solve for this was probably a bit on the "hacky" side, but it works. I'm sure a more clever Rust programer would do something with intersecting sets, or at least using map/reduce in place of the nested `for` loops I opted for. But it's Sunday, this works, it's good enough.
+
+### Day 7 - Part 1
+
+Parsing the input was kind of annoying on this one, and I'll be the first to admit my code is anything but elegant. It finds the solution, albeit pretty slowly. I imagine if I'd keep my data in a dictionary (instead of a Vec), and cache calculated results, this would be quite a bit faster.
