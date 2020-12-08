@@ -85,3 +85,7 @@ So my solve for this was probably a bit on the "hacky" side, but it works. I'm s
 Parsing the input was kind of annoying on this one, and I'll be the first to admit my code is anything but elegant. It finds the solution, albeit pretty slowly. I imagine if I'd keep my data in a dictionary (instead of a Vec), and cache calculated results, this would be quite a bit faster.
 
 **Addendum** - Well, I tweaked it a bit. I didn't add the cache, but I did switch the structure to using a `HashMap` instead of a `Vec`. I also encapsulated the collection in a struct so I don't have to pass around quite so many parameters.
+
+### Day 7 - Part 2
+
+Part two is a relatively simple variation on the recursive function from part one. The logic in the aggregate function is easy to get wrong (`accumulator + count + (count * recursive count)`) if you're like me and you just start pounding on the keyboard rather than thinking through things.

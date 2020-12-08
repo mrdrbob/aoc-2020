@@ -19,8 +19,11 @@ pub fn execute() {
         bag_container.push(bag);
     }
 
-    let names:Vec<String> = bag_container.all_bags.iter().map(|(_, bag)| { bag.name.clone() }).collect();
-    let count = names.iter().filter(|bag_name| { bag_container.can_bag_contain(bag_name, "shiny gold")  }).count();
+    // let names:Vec<String> = bag_container.all_bags.iter().map(|(_, bag)| { bag.name.clone() }).collect();
+    // let count = names.iter().filter(|bag_name| { bag_container.can_bag_contain(bag_name, "shiny gold")  }).count();
+    // println!("{}", count);
+
+    let count = bag_container.count("shiny gold");
     println!("{}", count);
 }
 
@@ -39,6 +42,14 @@ impl BagContainer {
         self.all_bags.insert(bag.name.clone(), bag);
     }
 
+    fn count(&self, name:&str) -> i32  {
+        let bag = self.all_bags.get(name).unwrap();
+        bag.contains.iter().fold(0i32, |acc, item| {
+            let child = self.all_bags.get(&item.bag_id).unwrap();
+            acc + item.count + (item.count * self.count(&child.name))
+        })
+    }
+
     fn can_bag_contain(&self, bag_name:&str, name:&str) -> bool {
         let bag = self.all_bags.get(bag_name).unwrap();
 
@@ -47,7 +58,6 @@ impl BagContainer {
             true
         } else {
             let any_child_bag_can_contain = bag.contains.iter().any(|child| {
-                // let child_bag = bag_list.iter().find(|cb| { cb.name  == child.bag_id }).unwrap();
                 self.can_bag_contain(child.bag_id.as_str(), name)
             });
     
