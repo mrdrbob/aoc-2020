@@ -89,3 +89,19 @@ Parsing the input was kind of annoying on this one, and I'll be the first to adm
 ### Day 7 - Part 2
 
 Part two is a relatively simple variation on the recursive function from part one. The logic in the aggregate function is easy to get wrong (`accumulator + count + (count * recursive count)`) if you're like me and you just start pounding on the keyboard rather than thinking through things.
+
+### Day 8 - Part 1
+
+Part one was pretty straight forward, kind of fun to write. Just a simple interpreter and then a `HashSet` to keep track of any instructions that had been executed.
+
+### Day 8 - Part 2
+
+Another fun one to work out, though I spent a *lot* of time fighting borrowing mechanics. I'm not blaming borrowing here--this is 100% on me for not understanding it well enough. I finally put most of the ownership up in a `VirtualMachine` struct, and was able to stumble through the syntax enough to allow it to keep a reference to the list of instructions, but own the rest of the information.
+
+Basically, here was my algorithm:
+
+1. I create a VM and execute the instructions as-is until it detects an infinite loop (mostly code from day 1). Keep a list of every instruction that was visited.
+2. Go back through all the instructions and check every `jmp` and `nop` and see if any (when swapped) hit an instruction that was not previously visited.
+3. For every swapped instruction that ended up visiting an instruction that wasn't previously visited (in my case, there are about 284), execute the VM again, but with that instruction flipped, and see if it terminates correctly.
+
+Of the 284 possible flips, only one did not end in an infinite loop.
