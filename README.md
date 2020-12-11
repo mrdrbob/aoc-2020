@@ -114,3 +114,14 @@ The second part is just scanning that buffer for matches. The one "optimization"
 
 That said, lines like `n2.clone() + number.clone() == this_number.clone()` make me suspect I'm fundamentally doing this all wrong.
 
+### Day 9 - Part 2
+
+So for this one we need to find a continuous set of numbers that sum-up to the value found in the part 1. I won't lie, this one took a long time to get right. I had the basic concept, but getting the details exactly right took WAY too long.
+
+Here's my strategy:
+
+1. Keep two pointers, one to the end of the set and one to the front of the set.
+2. Calculate the sum of the numbers between those indices. I do this in real-time by adding or subtracting values as I change the indices.
+3. If my current sum is too small, move the end pointer ahead one and add the number it's pointing at.
+4. If my current sum is too large, move the start pointer ahead one and subtract the number it was previously pointing at.
+5. Iterate until the correct sum is found.
