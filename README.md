@@ -105,3 +105,12 @@ Basically, here was my algorithm:
 3. For every swapped instruction that ended up visiting an instruction that wasn't previously visited (in my case, there are about 284), execute the VM again, but with that instruction flipped, and see if it terminates correctly.
 
 Of the 284 possible flips, only one did not end in an infinite loop.
+
+### Day 9 - Part 1
+
+So I think there are two key parts to this part of the challenge. The first is you need some kind of rolling buffer (that's probably not technically the right term). I'm using a `VecDeque`. So it's relatively simple to keep track of the last 25 seen numbers.
+
+The second part is just scanning that buffer for matches. The one "optimization" I do here is skip comparisons I've already done. So I check the **first** number against the second, third, forth, etc. Then I check the **second** against the third, forth, fifth, etc. I don't compare second against first (since that comparison has already happened).
+
+That said, lines like `n2.clone() + number.clone() == this_number.clone()` make me suspect I'm fundamentally doing this all wrong.
+
