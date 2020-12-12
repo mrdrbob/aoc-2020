@@ -125,3 +125,7 @@ Here's my strategy:
 3. If my current sum is too small, move the end pointer ahead one and add the number it's pointing at.
 4. If my current sum is too large, move the start pointer ahead one and subtract the number it was previously pointing at.
 5. Iterate until the correct sum is found.
+
+### Day 10 - Part 1
+
+The devil is in the details. I ended up making this one more complicated than it is, but the key for me was to re-read the instructions and realize I need to include the difference between the 0 jolt port and the first adapter *and* the difference between the last adapter and the device (I cheated here in that the device is always 3 more than the highest joltage, so I just add 1 to the 3 jolts count).
