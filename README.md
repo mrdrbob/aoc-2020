@@ -129,3 +129,7 @@ Here's my strategy:
 ### Day 10 - Part 1
 
 The devil is in the details. I ended up making this one more complicated than it is, but the key for me was to re-read the instructions and realize I need to include the difference between the 0 jolt port and the first adapter *and* the difference between the last adapter and the device (I cheated here in that the device is always 3 more than the highest joltage, so I just add 1 to the 3 jolts count).
+
+### Day 10 - Part 2
+
+So for today's challenge, the brute-force method of basically attempting every possibility would be prohibitively slow, not to mention complicated. For me, the key insight is to think of the list as sorted, but iterate through it from the largest to the smallest. For each item, you can look at the next three or so adapters and check which ones would be possible jumps. Then take the sum of their possible jumps. It's like recursion in reverse.
