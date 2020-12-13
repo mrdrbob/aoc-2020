@@ -133,3 +133,9 @@ The devil is in the details. I ended up making this one more complicated than it
 ### Day 10 - Part 2
 
 So for today's challenge, the brute-force method of basically attempting every possibility would be prohibitively slow, not to mention complicated. For me, the key insight is to think of the list as sorted, but iterate through it from the largest to the smallest. For each item, you can look at the next three or so adapters and check which ones would be possible jumps. Then take the sum of their possible jumps. It's like recursion in reverse.
+
+### Day 11 - Part 1
+
+The worst part of this puzzle is the missed opportunity to call the seats "thrones" and make a game of life/thrones pun.
+
+This one is mostly about getting all the details correct, and treating the map as immutable. If you make changes to the map as you calculate each node, you'll get the wrong answers. You need to calculate a **new** map for each iteration. While I do that, I also check if any value has changed to make detecting the loop easier.
