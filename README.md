@@ -139,3 +139,7 @@ So for today's challenge, the brute-force method of basically attempting every p
 The worst part of this puzzle is the missed opportunity to call the seats "thrones" and make a game of life/thrones pun.
 
 This one is mostly about getting all the details correct, and treating the map as immutable. If you make changes to the map as you calculate each node, you'll get the wrong answers. You need to calculate a **new** map for each iteration. While I do that, I also check if any value has changed to make detecting the loop easier.
+
+### Day 11 - Part 2
+
+So obviously in this one I had to rework the code that looked at the adjacent seats into code that could scan in the 8 directions. I did this by using an x and y offset and recursively calling itself if the spot being examined is floor. My `move_point` function is absolutely hideous and I'm quite certain there are far better ways to write that. But, it works.

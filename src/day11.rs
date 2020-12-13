@@ -61,19 +61,63 @@ impl Grid {
         }
     }
 
+    fn move_point(&self, x:usize, y:usize, x_delta:i32, y_delta:i32) -> Option<(usize, usize)> {
+        let new_x = if x_delta < 0 {
+            if x == 0 {
+                None
+            } else {
+                x.checked_sub(x_delta.abs() as usize)
+            }
+        } else { 
+            match x.checked_add(x_delta as usize) {
+                Some(x2) if x2 < self.width => Some(x2),
+                _ => None
+            }
+        };
+        let new_y = if y_delta < 0 {
+            if y == 0 {
+                None
+            } else {
+                y.checked_sub(y_delta.abs() as usize)
+            }
+        } else { 
+            match y.checked_add(y_delta as usize) {
+                Some(y2) if y2 < self.height() => Some(y2),
+                _ => None
+            }
+         };
+
+         if new_x.is_some() && new_y.is_some() {
+            // println!("{} {} {} {}", x_delta, y_delta, new_y.unwrap(), new_y.unwrap());
+            Some((new_x.unwrap(), new_y.unwrap()))
+         } else {
+            None
+         }
+    }
+
+    fn scan_for_seat(&self, x:usize, y:usize, x_delta:i32, y_delta:i32) -> i32 {
+        let new_point = self.move_point(x, y, x_delta, y_delta);
+        match new_point {
+            None => 0,
+            Some((new_x, new_y)) => {
+                match self.data[self.xy_to_pos(new_x, new_y)] {
+                    '#' => 1,
+                    '.' => self.scan_for_seat(new_x, new_y, x_delta, y_delta),
+                    _ => 0
+                }
+            }
+        }
+    }
+
     fn adjacent_count(&self, x:usize, y:usize) -> i32 {
-        let total =         if y > 0 && x > 0              { self.seated_count(x - 1, y - 1) } else { 0 };
-        let total = total + if y > 0                       { self.seated_count(x, y - 1) } else { 0 };
-        let total = total + if y > 0 && x < self.width -1  { self.seated_count(x + 1, y - 1) } else { 0 };
-
-        let total = total + if x > 0                       { self.seated_count(x - 1, y) } else { 0 };
-        // skip self
-        let total = total + if x < self.width - 1                          { self.seated_count(x + 1, y) } else { 0 };
-
-        let total = total + if y < self.height() - 1 && x > 0              { self.seated_count(x - 1, y + 1) } else { 0 };
-        let total = total + if y < self.height() - 1                       { self.seated_count(x, y + 1) } else { 0 };
-        let total = total + if y < self.height() - 1 && x < self.width - 1 { self.seated_count(x + 1, y + 1) } else { 0 };
-
+        let total =         self.scan_for_seat(x, y, -1, -1); // UL
+        let total = total + self.scan_for_seat(x, y,  0, -1); // U
+        let total = total + self.scan_for_seat(x, y,  1, -1); // UR
+        let total = total + self.scan_for_seat(x, y,  1,  0); // R
+        let total = total + self.scan_for_seat(x, y,  1,  1); // DR
+        let total = total + self.scan_for_seat(x, y,  0,  1); // D
+        let total = total + self.scan_for_seat(x, y, -1,  1); // DL
+        let total = total + self.scan_for_seat(x, y, -1,  0); // L
         total
     }
 
@@ -95,7 +139,7 @@ impl Grid {
                     if count == 0 { '#' } else { 'L' }
                 },
                 '#' => {
-                    if count >= 4 { 'L' } else { '#' }
+                    if count >= 5 { 'L' } else { '#' }
                 },
                 _ => '.'
             };
