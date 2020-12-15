@@ -143,3 +143,7 @@ This one is mostly about getting all the details correct, and treating the map a
 ### Day 11 - Part 2
 
 So obviously in this one I had to rework the code that looked at the adjacent seats into code that could scan in the 8 directions. I did this by using an x and y offset and recursively calling itself if the spot being examined is floor. My `move_point` function is absolutely hideous and I'm quite certain there are far better ways to write that. But, it works.
+
+### Day 12 - Part 1
+
+Starting to fall behind, but such is the holidays, even in a COVID world. I cheaped out on this one and did giant logic trees for turning directions. Instead, I should have probably modeled directions and used maths to resolve the left and right turns, etc. What I did is not very... elegant. I just like `match`.
