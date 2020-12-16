@@ -147,3 +147,8 @@ So obviously in this one I had to rework the code that looked at the adjacent se
 ### Day 12 - Part 1
 
 Starting to fall behind, but such is the holidays, even in a COVID world. I cheaped out on this one and did giant logic trees for turning directions. Instead, I should have probably modeled directions and used maths to resolve the left and right turns, etc. What I did is not very... elegant. I just like `match`.
+
+### Day 12 - Part 2
+
+This is a relatively straight-forward modification of the existing algorithm. Rather than calculate rotations for 180 and 270, I just repeat the left and right rotations. The hardest part for me was keeping all the positive and negative values for the directions straight in my head.
+
