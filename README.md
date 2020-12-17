@@ -155,3 +155,14 @@ This is a relatively straight-forward modification of the existing algorithm. Ra
 ### Day 13 - Part 1
 
 This one isn't bad if you know how to use modulo. You're really just figuring out the remainder between the earliest possible departure time and each bus id. Then find the smallest of those.
+
+### Day 13 - Part 2
+
+I admit this one was tough to reason out. The actual programming was simple, but it took my poor old tired brain a while to get there. Here's what I'd give as hints, if you're trying to figure this one out:
+
+1. The simplest thing is to iterate through all possible timestamps and check if all the buses (with their offset) could possibly land on that spot.
+2. Quote: "surely the actual earliest timestamp will be larger than `100000000000000`". This gives you a good place to start.
+3. You don't need to iterate *all* timestamps. Let's say your timestamp is 50 and the bus id is 19. You know 51, 52, 53.. through 68 will not possibly work, so skip them.  If multiple bus ids (for example: 2, 3, 5) all match, you know the next offset will also have to match all 3 of those ids. What's the next number that iterating 2 at a time, 3 at a time, and 5 at a time will hit?
+4. Finally, there's something special about all the bus ids.
+
+I won't spoil it here this time. You'll have to read the code.
