@@ -152,3 +152,6 @@ Starting to fall behind, but such is the holidays, even in a COVID world. I chea
 
 This is a relatively straight-forward modification of the existing algorithm. Rather than calculate rotations for 180 and 270, I just repeat the left and right rotations. The hardest part for me was keeping all the positive and negative values for the directions straight in my head.
 
+### Day 13 - Part 1
+
+This one isn't bad if you know how to use modulo. You're really just figuring out the remainder between the earliest possible departure time and each bus id. Then find the smallest of those.
