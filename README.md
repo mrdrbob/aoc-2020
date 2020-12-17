@@ -166,3 +166,7 @@ I admit this one was tough to reason out. The actual programming was simple, but
 4. Finally, there's something special about all the bus ids.
 
 I won't spoil it here this time. You'll have to read the code.
+
+### Day 14 - Part 1
+
+I feel like part 1 is pretty straight forward if you know about bitwise operations. I think the key insight hint I'd give on this one is: treat the mask as two operations, a set and an unset.
