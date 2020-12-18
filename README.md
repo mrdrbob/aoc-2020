@@ -170,3 +170,9 @@ I won't spoil it here this time. You'll have to read the code.
 ### Day 14 - Part 1
 
 I feel like part 1 is pretty straight forward if you know about bitwise operations. I think the key insight hint I'd give on this one is: treat the mask as two operations, a set and an unset.
+
+### Day 14 - Part 2
+
+This was an interesting one, in that you need to build apply all possible permutations of a set of bits. I decided to calculate those variations up front and store them with the instruction. The tricky part was generating (and to a lesser extent, applying) the variations. I did this by using a stack to effectively simulate recursion. I tried to document my process in the code.
+
+As for applying the variations, I use an inverted mask of all the floating bits to clear all the corresponding bits on the address (`&`ing the `!` version of the mask). Then I set the bits according to the variant (by `|`ing the variant).
