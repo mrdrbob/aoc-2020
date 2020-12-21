@@ -176,3 +176,16 @@ I feel like part 1 is pretty straight forward if you know about bitwise operatio
 This was an interesting one, in that you need to build apply all possible permutations of a set of bits. I decided to calculate those variations up front and store them with the instruction. The tricky part was generating (and to a lesser extent, applying) the variations. I did this by using a stack to effectively simulate recursion. I tried to document my process in the code.
 
 As for applying the variations, I use an inverted mask of all the floating bits to clear all the corresponding bits on the address (`&`ing the `!` version of the mask). Then I set the bits according to the variant (by `|`ing the variant).
+
+### Day 15 - Part 1
+
+I think there are two important things to consider when doing today's puzzle:
+
+1. You don't need to know the entire history, just when the last time each number was spoken.
+2. You need to note a number's history AFTER you've considered it for this round. I did this by processing the first n-1 numbers in the initial list, then "speaking" the last number in the list without yet adding its history.
+
+### Day 15 - Part 2
+
+So in my (admittedly limited) experience when the challenge is taking your solution from the previous day and running it for a lot longer, the idea is that your first solution is probably too slow, or that the results stabilize into a pattern, which you can then use to extrapolate the correct answer (without having to actually run all the iterations that otherwise would've been required).
+
+In my case, I ran my solution in debug mode and closed it after like five seconds -- too slow. But then, on a whim, I ran it in release mode and it came back with the answer in like 1 second. I guess it's fast enough? Maybe I was supposed to find a smarter solution, but this worked, I'm going with it.
