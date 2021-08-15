@@ -189,3 +189,12 @@ I think there are two important things to consider when doing today's puzzle:
 So in my (admittedly limited) experience when the challenge is taking your solution from the previous day and running it for a lot longer, the idea is that your first solution is probably too slow, or that the results stabilize into a pattern, which you can then use to extrapolate the correct answer (without having to actually run all the iterations that otherwise would've been required).
 
 In my case, I ran my solution in debug mode and closed it after like five seconds -- too slow. But then, on a whim, I ran it in release mode and it came back with the answer in like 1 second. I guess it's fast enough? Maybe I was supposed to find a smarter solution, but this worked, I'm going with it.
+
+### Day 16 - Part 1
+
+A *little* late. After talking with a colleague, I was reminded of AOC and thought I should revisit the challenges I hadn't gotten to. So I did. For part one, I immediately see two possible strategies:
+
+1. Going through all the tickets and attempting to apply all possible rules to each, looking for rules that don't fit.
+2. Pre-calculate all possible valid numbers, then iterate through all tickets looking for any number that isn't in the set.
+
+I went with strategy two.
