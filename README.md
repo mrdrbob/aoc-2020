@@ -198,3 +198,15 @@ A *little* late. After talking with a colleague, I was reminded of AOC and thoug
 2. Pre-calculate all possible valid numbers, then iterate through all tickets looking for any number that isn't in the set.
 
 I went with strategy two.
+
+### Day 16 - Part 2
+
+So part 2 largely ended up being a rewrite, taking more advantage of structures to organize code and hopefully make the main logic a little clearer. This one was a bit tricky, but really boils down to a few steps:
+
+1. Iterate through all tickets and remove any for which no field is valid. This is basically part 1.
+2. Next I build a collection of *possible* field-to-column mappings. This takes a few loops, which can make it hard to wrap your head around. But in short: Loop 1: Iterate through all the fields. Loop 2: For each field, iterate through all the columns. Loop 3: For each column, loop through all the tickets and keep the tickets where all the values in *this* column are valid for *this* field.
+3. Now each field has a list of possible column mappings. Many fields have multiple possible mappings, but at least one has only one possible mapping, so we know that one is correct.
+4. We save the mapping we know to be correct, and then remove it from all possible mappings. Then we iterate again. And again. We repeat step 3 and 4 until all of the possible mappings have been found.
+5. Finally, now that we know the columns that correspond to the departure fields, we can find and multiply the values from my ticket.
+
+Important reminder: when trying to figure out the possible column mappings, don't forget to **include your own ticket**. If you forget that, you may be staring at your code for a very long time wondering why it doesn't work. Or at least, that's what I assume would happen if you forget. Which I totally didn't.
