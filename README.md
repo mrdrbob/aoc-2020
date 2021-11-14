@@ -218,3 +218,9 @@ So for this one, the 3D space we're representing is infinite. So rather than doi
 I still feel like my pattern of removing an item from the map so I can mutate it, and the re-inserting is probably idiomatically wrong.
 
 The big question then is: will this scale for part 2???
+
+### Day 17 - Part 2
+
+Spoiler: it did scale, after just manually adding another dimension to my structures. It does take a few seconds to calculate the final total, but technically works. I'm sure there are a lot of places I could optimize this. I allocate a vector to get a list of neighboring points, and that could probably just be an iterator instead. I check points multiple times when iterating through possibilities. I also remove/insert a lot of items from the world space, when I probably could be mutating those items directly instead. But, to put my feelings on this matter in technical terms: `¯\_(ツ)_/¯`.
+
+It would be interesting to take the structures (`Point4d`, `Space4d`) and abstract out the number of dimensions, allowing for an arbitrary number of dimensions. I'm certain it could be made to work, but that's for someone with more free time and skill than me.
