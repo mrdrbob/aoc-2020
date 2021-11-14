@@ -210,3 +210,11 @@ So part 2 largely ended up being a rewrite, taking more advantage of structures 
 5. Finally, now that we know the columns that correspond to the departure fields, we can find and multiply the values from my ticket.
 
 Important reminder: when trying to figure out the possible column mappings, don't forget to **include your own ticket**. If you forget that, you may be staring at your code for a very long time wondering why it doesn't work. Or at least, that's what I assume would happen if you forget. Which I totally didn't.
+
+### Day 17 - Part 1
+
+So for this one, the 3D space we're representing is infinite. So rather than doing something like 3 dimensional array, I did (basically) a three dimensional hashmap, sort of? The X plane, rather than being an array, is a hashmap where the key is the X coordinate, and the value is the Y plane. The Y plane is also a hashmap, where the key is the Y coordinate, and the value is the Z plane. The Z plane is just a hashset of values. You can think of it as a tree structure, the root is the X plane, the Y plan is a branch of X, and Z is a leaf of X.
+
+I still feel like my pattern of removing an item from the map so I can mutate it, and the re-inserting is probably idiomatically wrong.
+
+The big question then is: will this scale for part 2???
