@@ -224,3 +224,11 @@ The big question then is: will this scale for part 2???
 Spoiler: it did scale, after just manually adding another dimension to my structures. It does take a few seconds to calculate the final total, but technically works. I'm sure there are a lot of places I could optimize this. I allocate a vector to get a list of neighboring points, and that could probably just be an iterator instead. I check points multiple times when iterating through possibilities. I also remove/insert a lot of items from the world space, when I probably could be mutating those items directly instead. But, to put my feelings on this matter in technical terms: `¯\_(ツ)_/¯`.
 
 It would be interesting to take the structures (`Point4d`, `Space4d`) and abstract out the number of dimensions, allowing for an arbitrary number of dimensions. I'm certain it could be made to work, but that's for someone with more free time and skill than me.
+
+*Addendum*: Looking back on this, it occurs to me that I did that thing I love to do: needlessly complicated things. The idea of representing the dimensions as a kind of tree-like structure is kind of *neat*, but really, I could have just kept track of all the points in a flat set and achieved the same goal with quite a bit less fanfare. Hindsight, or maybe lack of foresight. Either way, I'm going to leave it.
+
+### Day 18 - Part 1
+
+My approach here was to tokenize the input, then process the tokens from left to right in a truly hideous, recursive state machine. The "nice" thing about it is that because I never build a syntax tree, I don't need to use a self-referential strut/enum, which can be problematic in Rust. I mean, it's not problematic for people who know what they're doing, but for *me* it was. At some point I will have to learn to box "`Box`" up a better solution for these kinds of problems… but the state machine technically works for now.
+
+As for how the state machine, I keep track of the "state" of the parser, which includes what value has been processed so far (if any), what operation is pending (if any), and the position in the input. Then I can decide what tokens are valid in each state and process accordingly, creating a new state. Or `panic!` if the syntax is somehow invalid. Also, by calling the function recursively, I get a stack for processing parentheses basically for "free".
