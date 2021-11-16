@@ -257,3 +257,19 @@ This was a relatively small adjustment / hack to make the modified order of oper
 Now when the machine encounters an operation, it branches based on the operation. Addition works exactly the same as before, it becomes a `ValueAndOperation` and moves on. For multiplication, it creates a new, `Empty` state and then recursively processes the next token, forcing the "right" side of this operation to be solved *first*, and *then* applies the multiplication. This effectively makes multiplication the last in line for order of operations.
 
 Frankly, I have mixed feelings about this. On the one hand, it's clever. On the other, the *intent* of the code (process plus operations first, then multiplication) isn't super clear from the code. In a sense, I'm using what looks like a side-effect as core logic. Meh.
+
+### Day 19 - Part 1
+
+So what the challenge describes (at least to my mind) is effectively a parser: a collection of rules that are applied to a stream of tokens. So naturally I relied heavily on my [former experience](https://github.com/mrdrbob/parsing) and architected a solution with that in mind.
+
+So in short, I consider each line of in put a stream of tokens. Then I based my solution on a series of possible rules:
+
+* Match `Character` - Matches the current token to a particular character.
+* Match `Rule` - Executes a rule at a  particular index for the current token.
+* Match `Any` - Executes a collection of rules against the current token until one of them matches.
+* Match `Each` - Executes a collection of rules, requiring each to match the next token in the stream.
+* Match `End` - A special rule I use at the end of the stream to verify that the end of the stream has been met.
+
+The token stream I represent as a vector of characters, and a `Position`, which just bundles up some of the logic for moving through the stream. Instead of returning either a character or `None` like a `chars()` iterator would, `Position` returns either the current position and a new `Position` representing the remaining stream, or `None` if we're at the end of the stream. Because `Position` is immutable, it makes back tracking when a rule doesn't pass (in `Any` for example) sort of automatic, by using the stack to track the position.
+
+So then I execute the stream of tokens for each message against the rule tree I've built and count up the ones that succeed.
