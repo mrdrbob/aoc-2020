@@ -204,7 +204,7 @@ I went with strategy two.
 So part 2 largely ended up being a rewrite, taking more advantage of structures to organize code and hopefully make the main logic a little clearer. This one was a bit tricky, but really boils down to a few steps:
 
 1. Iterate through all tickets and remove any for which no field is valid. This is basically part 1.
-2. Next I build a collection of *possible* field-to-column mappings. This takes a few loops, which can make it hard to wrap your head around. But in short: Loop 1: Iterate through all the fields. Loop 2: For each field, iterate through all the columns. Loop 3: For each column, loop through all the tickets and keep the tickets where all the values in *this* column are valid for *this* field.
+2. Next I build a collection of *possible* field-to-column mappings. This takes a few loops, which can make it hard to wrap your head around. But in short: Loop 1: Iterate through all the fields. Loop 2: For each field, iterate through all the columns. Loop 3: For each column, loop through all the tickets and keep the column mappings where all the values in *this* column are valid for *this* field.
 3. Now each field has a list of possible column mappings. Many fields have multiple possible mappings, but at least one has only one possible mapping, so we know that one is correct.
 4. We save the mapping we know to be correct, and then remove it from all possible mappings. Then we iterate again. And again. We repeat step 3 and 4 until all of the possible mappings have been found.
 5. Finally, now that we know the columns that correspond to the departure fields, we can find and multiply the values from my ticket.
@@ -231,4 +231,29 @@ It would be interesting to take the structures (`Point4d`, `Space4d`) and abstra
 
 My approach here was to tokenize the input, then process the tokens from left to right in a truly hideous, recursive state machine. The "nice" thing about it is that because I never build a syntax tree, I don't need to use a self-referential strut/enum, which can be problematic in Rust. I mean, it's not problematic for people who know what they're doing, but for *me* it was. At some point I will have to learn to box "`Box`" up a better solution for these kinds of problems… but the state machine technically works for now.
 
-As for how the state machine, I keep track of the "state" of the parser, which includes what value has been processed so far (if any), what operation is pending (if any), and the position in the input. Then I can decide what tokens are valid in each state and process accordingly, creating a new state. Or `panic!` if the syntax is somehow invalid. Also, by calling the function recursively, I get a stack for processing parentheses basically for "free".
+As for the state machine, probably the easiest way to understand it is to manually go through a simple equation, thinking about what state you start and end with for each character/token. For example: `5 + 2 * 2`
+
+1. At the first token, `5`, you start with nothing. You're in an initial, or `Empty` state. But now you have a number! So you leave this token in a `Value` state.
+2. The next token: `+`. You start with a value, and now you have an operation. You can't do anything else, so just keep the value and operation in mind. You leave this state in a `ValueWithOperation` state.
+3. The next token: `2`. You start with a value and operation, and now you have another value, so can complete this operation. `5 + 2 = 7`. Since you've processed the values, you can leave this state with just your current value in mind: a `Value` state with a value of `7`.
+4. The next token: `*`. As before, you're in a `Value` state, tack on the operation just like in 2. Leave with a `ValueWithOperation` state.
+5. The next token: `2`. Just like in 3, you start in a `ValueWithOperation` state, complete the operation, and exit in a `Value` state.
+6. No more input, you should expect to be in a `Value` state. If so, the operation was a success!
+
+The parenthesis are handled recursively. The function for parsing basically calls itself. For example: `1 + (2 * 2) + 1`:
+
+1. Process the `1` and the `+` as usual.
+2. When you see reach the `(` character, push the current state (`ValueWithOperation`) on the stack, call the parser with a new, `Empty` state. Process that state in the usual fashion until the state machine hits the `)` character. At that point, the state machine should be in a `Value` state. Return that state.
+3. Pop the `ValueWithOperation` state off the stack and apply the `Value` state from the recursive call. Continue processing.
+
+The above describes roughly what's happening at a conceptual level. In reality, I'm not looping, but doing everything via recursion. I'm also keeping track of my location in the token stream. But the above is roughly the idea.
+
+Also, for building state machines, Rust's enums and pattern matching are… *chef's kiss*.
+
+### Day 18 - Part 2
+
+This was a relatively small adjustment / hack to make the modified order of operations work. Currently, when the state machine encounters an operation, it expects to have a value in mind (i.e. it should enter in the `ValueOnly` state), and then it "remembers" the operation with the value (exit with the `ValueAndOperation` state), and then next time it finds value, it executes the remembered operator against the remembered value and new value. This effectively makes the machine work left-to-right.
+
+Now when the machine encounters an operation, it branches based on the operation. Addition works exactly the same as before, it becomes a `ValueAndOperation` and moves on. For multiplication, it creates a new, `Empty` state and then recursively processes the next token, forcing the "right" side of this operation to be solved *first*, and *then* applies the multiplication. This effectively makes multiplication the last in line for order of operations.
+
+Frankly, I have mixed feelings about this. On the one hand, it's clever. On the other, the *intent* of the code (process plus operations first, then multiplication) isn't super clear from the code. In a sense, I'm using what looks like a side-effect as core logic. Meh.

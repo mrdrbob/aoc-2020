@@ -1,6 +1,6 @@
 pub fn execute() {
+    // /*
     let file = std::fs::read_to_string(".\\data\\18.txt").unwrap();
-
     let sum:usize = file.lines().fold(0, |acc, line| {
         println!("{}", line);
         let tokenized = tokenize(line);
@@ -14,11 +14,14 @@ pub fn execute() {
     });
 
     println!("{}", sum);
+    // */
 
-    // let t = "9 + 2 * ((7 + 9 + 5 + 7) * 3 + (5 * 3 * 6 * 5 + 6) + (9 * 4 + 9 * 6 + 9)) * 8 + 5";
-    // let tokenized = tokenize(t);
-    // let value = process_expression(ParserState { state: ExpressionState::Empty, position: 0 }, &tokenized);
-    // println!("{:?}", value);
+    /*
+    let t = "9 + 2 * ((7 + 9 + 5 + 7) * 3 + (5 * 3 * 6 * 5 + 6) + (9 * 4 + 9 * 6 + 9)) * 8 + 5";
+    let tokenized = tokenize(t);
+    let value = process_expression(ParserState { state: ExpressionState::Empty, position: 0 }, &tokenized);
+    println!("{:?}", value);
+    // */
 }
 
 fn process_expression(state:ParserState, tokens:&Vec<Token>) -> ParserState {
@@ -53,10 +56,19 @@ fn process_expression(state:ParserState, tokens:&Vec<Token>) -> ParserState {
             _ => panic!("Invalid operation {:?} {:?}", state, token)
         },
         Token::Op(op) => match state.state {
-            ExpressionState::ValueOnly(v) => process_expression(ParserState { position: state.position + 1, state: ExpressionState::ValueAndOperation(v, *op) }, tokens),
-            _ => panic!("Invalid operation")
+            ExpressionState::ValueOnly(v) => match op {
+                Operation::Plus => process_expression(ParserState { position: state.position + 1, state: ExpressionState::ValueAndOperation(v, *op) }, tokens),
+                Operation::Times => {
+                    let sub_result = process_expression(ParserState { position: state.position + 1, state: ExpressionState::Empty }, tokens);
+                    match sub_result.state {
+                        ExpressionState::Done(v2) => ParserState { position: sub_result.position, state:ExpressionState::Done(v * v2) },
+                        _ => panic!("Invalid operation")
+                    }
+                }
+            },// process_expression(ParserState { position: state.position + 1, state: ExpressionState::ValueAndOperation(v, *op) }, tokens),
+            _ => panic!("Invalid operation {:?} {:?}", state, token)
         }
-        _ => panic!("Invalid operation")
+        _ => panic!("Invalid operation {:?} {:?}", state, token)
     }
 }
 
