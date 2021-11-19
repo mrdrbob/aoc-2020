@@ -273,3 +273,33 @@ So in short, I consider each line of in put a stream of tokens. Then I based my 
 The token stream I represent as a vector of characters, and a `Position`, which just bundles up some of the logic for moving through the stream. Instead of returning either a character or `None` like a `chars()` iterator would, `Position` returns either the current position and a new `Position` representing the remaining stream, or `None` if we're at the end of the stream. Because `Position` is immutable, it makes back tracking when a rule doesn't pass (in `Any` for example) sort of automatic, by using the stack to track the position.
 
 So then I execute the stream of tokens for each message against the rule tree I've built and count up the ones that succeed.
+
+### Day 19 - Part 2
+
+This one stumped me for a while. The wrinkle that's introduced is the fact that the new rules introduce sequences that could potentially match the left OR right side, and the right side is effectively a loop meaning the match could happen multiple times. The problem is that the `Any` rule is greedy, meaning it will accept whichever rule matches first, and then consumes that input.
+
+To break it down a bit:
+
+```
+	 0: 8 11
+     8: 42 | 42 8
+	 11: 42 31 | 42 11 31
+```
+
+* Rule 0 is effectively "match rule 8, then rule 11"
+* Rule 8 is effectively "match rule 42 between one and infinite times"
+* Rule 11 is effectively "match rule 42 between one and infinite times then rule 31 between one and infinity times"
+
+Rule 11 is interesting, because the left half is "42 followed by 31", the right side is "42, then myself, then 31." Making it effectively 42 one or more times, then 31 one or more times.  So if rule 42 was "a" and 31 was "b", then "aaabbb" could be a valid message.
+
+The problem is that the rule resolution (as it is now) is going to match "42 followed by 31" and accept/consume those characters, then failing on the second "b". That's the eager consumption. But had it tried "42, myself, then 31", it would have worked.
+
+The most general way to fix this would be to update rule parsing to backtrack to Any rules that matched but had other branches they could attempt, and attempt those branches in the event of failure further up the line. Like brute forcing a maze. But that would be… complicated. Also computationally expensive.
+
+Instead, I manually implemented rules 0, 8, and 11.
+
+Because rule 8 will consume all input matching 42, and rule 11 requires at least one 42 match, I run rule 8 until it no longer works, then verify that it succeeded at least twice. 
+
+Then rule 11 is basically "42 at least once, then 31 at least once", and I know that all the 42-matching input has been consumed, I just run rule 31 multiple times, making sure it succeeds at least once.
+
+Of course, this feels super hacky. Change two rules, then basically write code to *simulate* those two rules, ignoring the actual rules completely.
