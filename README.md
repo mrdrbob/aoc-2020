@@ -303,3 +303,27 @@ Because rule 8 will consume all input matching 42, and rule 11 requires at least
 Then rule 11 is basically "42 at least once, then 31 at least once", and I know that all the 42-matching input has been consumed, I just run rule 31 multiple times, making sure it succeeds at least once.
 
 Of course, this feels super hacky. Change two rules, then basically write code to *simulate* those two rules, ignoring the actual rules completely.
+
+### Day 20 - Part 1
+
+So I started with the assumption that each edge of each tile will only ever match either one other tile's edge, or no edge at all. If that assumption is true, then tiles that have a match for each edge are "middle" pieces, tiles that have three edge matches are "side" pieces, and tiles that have two edges with and two edges without matches must be the corner pieces.
+
+I represent each tile as an array of bools, which I can then access with x, y coordinates as if it were a 2D array.
+
+Then I list all the tile edges, representing them as:
+
+1. An identifier, meaning the id of the tile it's attached to and the edge's cardinal direction (0 = North, 1 = East, etc)
+2. Two numbers based on the binary representation of that edge: one normal edge and one reversed edge. For example: `..##.#..#.` becomes `0b001101001`, which is 105 in decimal. And reversed (`.#..#.##..`) becomes `0b0100101100`, or 300 in decimal. A full edge might look like:
+
+```
+identifier:
+   tile id: 2311
+   cardinal direction: 0
+edge: 105
+edge reversed: 300
+```
+
+Then I iterate through all edges, looking for any edge that either matches the current edge, or the reverse of the current edge. In all cases I found either one match, or no matches. Had I found multiple matches, my assumption would have been wrong and… tears would have been shed. I also don't attempt the process for edges that have already been matched. For example, if edge 2311:4 matches 4514:1, then don't try to find matches for 4514:1; it's already matched.
+
+Once I resolve all the edge matches, I can then find all the tiles that have more than one edges with no matches (which I confirmed was four tiles, each with two non-matching edges). These are the corner pieces. Multiply the corresponding tile IDs together, and that is the answer.
+
