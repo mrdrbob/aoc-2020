@@ -327,3 +327,62 @@ Then I iterate through all edges, looking for any edge that either matches the c
 
 Once I resolve all the edge matches, I can then find all the tiles that have more than one edges with no matches (which I confirmed was four tiles, each with two non-matching edges). These are the corner pieces. Multiply the corresponding tile IDs together, and that is the answer.
 
+### Day 20 - Part 2
+
+This is one of those puzzles with which I have a love/hate relationship. It was kind of fun, but also a lot of tedious work, with a million little details that all have to be perfect. Fortunately, the puzzle is constructed in such a way that you usually know pretty early on if you're heading in the wrong direction.
+
+This is roughly how I solved it. I'll say up front that many of the steps I take are not the smartest ways of doing things, but I just needed to get it done.
+
+1. I already know the four corner tiles, so pick one of them and designate it the Northwest corner. Because we're rotating and flipping pieces, it doesn't matter which one we choose.
+2. Rotate that piece until its North edge has no other matching edge.
+3. If the West edge has a match, flip the tile. Now the North and West edges have no matches, we can begin matching Eastward and Southward.
+4. Strip the borders from that tile and write it to a bigger "map" which will hold all the final tile data.
+4. Now with the first piece in place and oriented correctly, I begin working on that row from West to East. I find whatever tile matches the East edge of the tile I last placed. Then I do the rotate/flip dance with that tile, strip its borders and write it to the map. Repeat for the entire row.
+5. At the end of the row, find the piece that matches the South edge of the West-most piece on the row. Flip/rotate, strip, write it to the map to start the next row.
+6. Repeat for each row until the entire map is complete.
+
+One all the rows are filled in, we have to search for monsters. Basically just scanning the entire completed map.
+
+Now I should have written a method that scans the map, and then rotates/flips it until monsters are found. I didn't, I just manually added in rotates/flips until I found an orientation that worked. By the time I got to this point, I had spent far too long on this, and was just over it.
+
+Obviously, there is a ton of room for optimization here. I have a dictionary of matching edges, but I just use it to grab the correct tile, then I take that tile and rotate/flip until it matches orientation. If I was smart, I'd use what I already know about the orientation of each edge and flip/rotate the tile once the correct amount. But I'm not smart—I'm lazy.
+
+So I got it done, and it's nice to talk about success, but here's something I failed at. When deciding how to flip/rotate tiles, I came up with the idea of basically using "wrapper" classes to modify how I *view* the underlying data, rather than actually changing the data itself. Clever, right? In C#, I'd make an interface (or maybe an abstract class), write the basic Tile class, then write some wrappers that access the data for `(x, y)` as `(y, WIDTH - x - 1)`. A horizontally flipped would access it as `(WIDTH - x - 1, y)`, etc. Want to rotate twice? Just wrap the rotation wrapper in a rotation wrapper! All the underlying data remains the same, you just *see* it as rotated. It's wrappers all the way down. Brilliant!
+
+Except I couldn't get it work in Rust. I created a `TileReader` trail with some default methods, and some required methods: `fn is_set(&self, x:usize, y:usize) -> bool`, and `fn size(&self) -> usize;`. The base tile reader would just work as expected: `fn is_set(&self, x:usize, y:usize) -> bool { let pos = (y * self.size()) + x self.data[pos] }`. But then I had wrapper structs:
+
+```rust
+   struct RotatedTile<'a> {
+       tile: &'a Tile
+   }
+
+   struct FlippedHorizontallyTile<'a> {
+       tile: &'a Tile
+   }
+
+   impl TileReader for RotatedTile<'_> {
+       fn is_set(&self, x:usize, y:usize) -> bool {
+           self.tile.is_set(y, self.size() - x - 1)
+       }
+
+       fn size(&self) -> usize { self.tile.size() }
+   }
+
+   impl TileReader for FlippedHorizontallyTile<'_> {
+       fn is_set(&self, x:usize, y:usize) -> bool {
+           self.tile.is_set(self.size() - x - 1, y)
+       }
+
+       fn size(&self) -> usize { self.tile.size() }
+   }
+```
+
+Some quick test and it worked perfectly!
+
+But then I tried to use these struts to actually do some work. Rust did **not** like that. The errors suggested I could use `dyn` somehow to treat these like "objects" in generic constraints. I tried. Then Rust hated my use of generics in the (admittedly) ugly `get_line` method of my base Tile object. I spent a quite a bit of time on that method, trying to figure out how to sensibly accept traits as arguments. I wasn't about to rip the generics out there.
+
+So I bailed on the idea. I like doing these puzzles. I like Rust. But I also like sleep. I'm afraid I just don't have time to learn all the intricacies of a language I only use once a year to do some puzzles.
+
+Anyway, I just write about this because: 1. I liked my wrapper idea, even though I wasn't experienced enough to pull it off in Rust; 2. sometimes we just need to see challenges and failures and not assume that someone sat down at a computer, pounded on the keyboard for ten minutes, and arrived at a solution that worked on the first try.
+
+In the end, I wrote some methods that just apply the rotations to new tiles and return those. Not very efficient (I create and throw away a lot of tiles), but it got the job done and didn't fry my CPU in the process. The immutability also saved me a lot of borrowing / mutation hassle.
