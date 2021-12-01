@@ -386,3 +386,21 @@ So I bailed on the idea. I like doing these puzzles. I like Rust. But I also lik
 Anyway, I just write about this because: 1. I liked my wrapper idea, even though I wasn't experienced enough to pull it off in Rust; 2. sometimes we just need to see challenges and failures and not assume that someone sat down at a computer, pounded on the keyboard for ten minutes, and arrived at a solution that worked on the first try.
 
 In the end, I wrote some methods that just apply the rotations to new tiles and return those. Not very efficient (I create and throw away a lot of tiles), but it got the job done and didn't fry my CPU in the process. The immutability also saved me a lot of borrowing / mutation hassle.
+
+### Day 21 - Part 1
+
+This one took significantly less time to solve that day 20. The solution is easiest to understand with a super small example:
+
+```
+   mxmxvkd kfcds (contains dairy, fish)
+   trh mxmxvkd fvjkl (contains dairy)
+```
+
+1. Look at the first line. We know `dairy` could possibly be in `mxmxvkd` or `kfcds`.
+2. The next line also contains `dairy`, but of the ingredients we know might contain dairy, this one only lists `mxmxvkd`. Therefore, `kfcds` does not contain dairy. Neither does `trh` nor `fvjkl`.
+
+The way the recipes are written encourages you to think about an ingredient to allergen mapping, but it works better to think about it as an allergen to possible ingredients mappings, and each time you encounter an allergen, eliminate any ingredient that doesn't appear in your current list of suspects AND the list of ingredients or that line.
+
+The rest is mostly careful application of set operations. I lean heavily on sets, which is a datatype I wish more C# developers were aware of. .NET didn't have a true "Set" type in the library until like .NET 3.5, so everyone knows all about `List<>`, but few know the alienated majesty of the `HashSet<>`.
+
+In the rusty realm I once again found myself doing odd, repetitive things that make me think I'm doing this wrong (for example, `.map(|&x| { x })` in a bunch of places). On the bright side, I've reached the point where I sometimes know something I can do to fix the compiler's complaint… without always knowing why or if it's a good idea. "Oh, can't touch the list here because I iterated it earlier. That's nothing a `.iter()` can't somehow fix!" I've reached the "somehow fixing" stage of language comprehension!
