@@ -404,3 +404,9 @@ The way the recipes are written encourages you to think about an ingredient to a
 The rest is mostly careful application of set operations. I lean heavily on sets, which is a datatype I wish more C# developers were aware of. .NET didn't have a true "Set" type in the library until like .NET 3.5, so everyone knows all about `List<>`, but few know the alienated majesty of the `HashSet<>`.
 
 In the rusty realm I once again found myself doing odd, repetitive things that make me think I'm doing this wrong (for example, `.map(|&x| { x })` in a bunch of places). On the bright side, I've reached the point where I sometimes know something I can do to fix the compiler's complaint… without always knowing why or if it's a good idea. "Oh, can't touch the list here because I iterated it earlier. That's nothing a `.iter()` can't somehow fix!" I've reached the "somehow fixing" stage of language comprehension!
+
+### Day 21 - Part 2
+
+Part 2 is similar to Day 16 of this year's challenges. Find the allergen with exactly one possible ingredient and capture that mapping. Remove that ingredient from all other possibilities. Iterate until all mappings have been found. Then sort the keys and join the values in the correct order (or print them lazily to the console for copy/pasting like I did).
+
+Once again I found my poor understanding of Rust to be my biggest impediment to getting this part done. By randomly sprinkling a `&` or a `*` here and there I could get the compiler to stop whining, but at some point I should really take the time to understand why my random "fixes" fix things.
