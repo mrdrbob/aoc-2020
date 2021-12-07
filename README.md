@@ -410,3 +410,7 @@ In the rusty realm I once again found myself doing odd, repetitive things that m
 Part 2 is similar to Day 16 of this year's challenges. Find the allergen with exactly one possible ingredient and capture that mapping. Remove that ingredient from all other possibilities. Iterate until all mappings have been found. Then sort the keys and join the values in the correct order (or print them lazily to the console for copy/pasting like I did).
 
 Once again I found my poor understanding of Rust to be my biggest impediment to getting this part done. By randomly sprinkling a `&` or a `*` here and there I could get the compiler to stop whining, but at some point I should really take the time to understand why my random "fixes" fix things.
+
+### Day 22 - Part 1
+
+Part one is mostly a matter of modeling the game and iterating until a winner is found. I had one small bug where I was popping the card off player one's queue, then checking player two's deck. If player two had no cards, then I'd consider it a player one win and bail out. Except player one just lost a card to the ether. I probably should have restructured the check that both player still have cards before attempting to pop from either player's deck. Instead, I just hackily pushed the card I popped off back on player one's queue. This bug only happens when player one wins.
